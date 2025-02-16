@@ -1,2 +1,2 @@
-# HW 2 Dataset
-This contains my chosen dataset on quarterly e-commerce sales from 2000-2024. 
+# HW 2 - Meher Malhotra
+This contains my chosen dataset on quarterly e-commerce sales from 2000-2024. It includes a CSV file and an Rmd file.
