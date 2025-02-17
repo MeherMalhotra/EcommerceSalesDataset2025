@@ -1,0 +1,47 @@
+---
+title: "HW 2: Choosing my Dataset"
+author: Meher Malhotra
+output: html_document
+date: "2025-02-16"
+---
+
+```{r }
+
+sales_dataset <- read.csv("/Users/mehermalhotra/Documents/time\ series/QuarterlyEcomSales.csv", header = FALSE)
+
+```
+
+## Questions on Data Set
+
+2. Data dictionary 
+
+Variable: Quarter <br>
+Variable Name: QUARTER <br>
+Data Type: Ordinal <br>
+Allowed Values: 1999Q4 - 2024Q3 <br>
+Description: Represents the financial quarters of a given year in which sales data was recorded <br>
+
+Variable: Total Retail Sales <br>
+Variable Name: TOTAL_SALES <br>
+Data Type: Numeric <br>
+Allowed Values: Any positive value <br>
+Description: Sales include merchandise sold (for cash or credit at retail or wholesale) by establishments primarily engaged in retail trade <br>
+
+Variable: Total E-Commerce Sales<br>
+Variable Name: ECOM_SALES <br>
+Data Type: Numeric <br>
+Allowed Values: Any positive value <br>
+Description: Sales include goods and services where the buyer places an order, or the price and terms of the sale are negotiated over an Electronic Data Interchange, the Internet, or any other online system <br>
+
+
+
+3. This data is collected through the Monthly Retail Trade Survey (MRTS) conducted by the US Census Bureau. A stratified simple random sampling method is used to select approximately 10,800 US retail firms whose sales are then weighted and benchmarked to represent the complete landscape of retail firms. The MRTS sample is updated on an ongoing basis to account for new retail employer businesses, business closures, and other changes to the retail business landscape. Firms are asked each month to report e-commerce sales separately. 
+
+
+
+4. This dataset is interesting to me because e-commerce has seen rapid growth in recent years. E-commerce has become a daily convenience for many consumers in the US, and it is hard to believe that it wasn't always this way. I love studying consumer behavior, so I am excited to analyze this dataset for trends and seasonality, as well as determine which model will best forecast overall retail and e-commerce sales for the next quarter. 
+
+
+
+
+
