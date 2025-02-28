@@ -1,0 +1,84 @@
+---
+title: "HW 4"
+author: "Meher Malhotra"
+date: "2025-02-24"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+
+library(forecast)
+library(fpp)
+library(fpp2)
+
+Quarterly_Ecom_Sales <- read.csv("/Users/mehermalhotra/Documents/time\ series/Quarterly_Ecom_Sales.csv")
+
+names(Quarterly_Ecom_Sales) <- c("Quarter", "Ecommerce_Sales")
+
+Ecom_Timeseries <- ts(rev(Quarterly_Ecom_Sales$Ecommerce_Sales), frequency = 4, c(1999, 4))
+
+str(Ecom_Timeseries)
+
+plot(Ecom_Timeseries, xlab="Time", ylab ="Ecommerce Sales (millions)")
+
+Acf(Ecom_Timeseries, lag.max =20)
+
+#Model 1: Naive Model
+naive_forecast <- naive(Ecom_Timeseries, 8)
+
+#Model 2: Simple Average Model
+simple_forecast <- meanf(window(Ecom_Timeseries, start=c(2019,1)), h=8)
+
+#Model 3: Moving Average Model
+ma_series <- ma(window(Ecom_Timeseries, start=c(2019,1)), order=3)
+ma_forecast <- forecast(ma_series, h=8)
+
+#Model 4: Exponential Smoothing (Holt Winters)
+hw_series <- HoltWinters(Ecom_Timeseries)
+hw_forecast <- forecast(hw_series, h=8)
+
+#Model 5: Decomposition 
+ets_forecast <- ets(Ecom_Timeseries)  
+
+plot(Ecom_Timeseries, main="Forecasts of Ecommerce Sales")
+lines(naive_forecast$mean, col="green")
+lines(simple_forecast$mean, col="purple")
+lines(ma_forecast$mean, col="blue")
+lines(ma_forecast$fitted, col="blue")
+lines(hw_forecast$mean, col = "red")
+lines(hw_forecast$fitted, col = "red")
+
+``` 
+
+1. Model 1, the naive forecast in green, only takes into account the last point in the dataset. It assumes e-commerce sales will stay exactly the same, but in exploratory analysis, we determined that there is a significant upward trend. More people are shopping online each year. This makes the naive forecast a weak forecast. 
+
+2. Model 2, the simple forecast in purple, only takes into account selected points in the dataset. I utilized a window of 22 periods (quarters), which I deemed were significant through exploratory analysis, to inform this model. However, since older periods are assigned an equal weight, it falls short of a strong forecast. 
+
+3. Model 3, the moving average forecast in blue, only takes into account selected points in the dataset and utilizes a moving average of 3 observations. I kept the order size small to give more weight to recent data points. This forecast appears a lot more accurate at predicting the next two years of e-commerce sales. 
+
+4. Model 4, the Holt-Winters model in red, is a form of exponential smoothing that accounts for level, trend, and seasonality. As seen below, the alpha value for the level is ~0.623, which indicates that the model puts more weight on recent points so recent changes will affect the level. The beta value is ~0.142, which could indicate that trend is a minor component when it comes to forecasting e-commerce sales - or perhaps the seasonal fluctuations are interfering with the trend. Finally, the gamma value is 1, which confirms that there is true seasonality to account for in this forecast. 
+
+``` {r}
+
+hw_series$alpha
+hw_series$beta
+hw_series$gamma
+
+plot(ets_forecast)
+```
+
+
+5. Model 5, the decomposition model, breaks down the data into error, trend, and seasonality (ETS). It shows an increasing level, an increasing then decreasing slope, and pretty consistent seasonality. The high alpha value of 0.7229 supports the idea that the most recent data is weighted heavily. By breaking the data down into its components, we can see what is driving changes in the observed data points and adjust the forecast accordingly. 
+
+```{r}
+#Accuracy Testing
+accuracy(naive_forecast)
+accuracy(simple_forecast)
+accuracy(ma_forecast)
+accuracy(hw_forecast)
+accuracy(ets_forecast)
+
+```
+
+
+The best model is...Model 3, the moving average model! I chose MAPE, or Mean Absolute Percent Error, as the accuracy measure because it is most commonly used in sales forecasting. Model 3 has the lowest MAPE of 1.73%. 
